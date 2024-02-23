@@ -9,24 +9,50 @@ format:
     embed-resources: true
 ---
 
-## Central America and the Caribbean in the 2000's
+## Political Institutions in the World
 
-This data set contains selected indicators from census data at the individual level for 13 countries across Central America and the Caribbean for the 2000-2010 decade. Source: IPUMS International ([Codebook](https://live.ipumsi.datadownload.ipums.org/web/extracts/ipumsi/2210604/ipumsi_00009.xml?jwt=eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ1bWEiLCJleHAiOjE3MDg2NjIwMzksIm5iZiI6MTcwODY2MTEzOSwic3ViIjoiN2RiMTViMTAtZjFjYi0wMTM1LWFmMmUtMDA1MDU2YTM1NDA1IiwiY29sbGVjdGlvbnMiOlsiY3BzIiwiaXB1bXNpIl19.D8QH7AA7EZluCH9dSzLSjOph6c6SD6UqifJGCQdwtB70yb-56nkF_ZrhqeAc-M2KubzNl7BV-4qp3YVq08znUFfm2waK6pWmOiGFFE2MRYAgLkfnwZniPCvRbuesOwy8Omv7XnMx217Th7aGhLWgfZkq9FU8mCq-7N1VVzpWZk2t6_SAf0mzRrfbD6CsnDNNWLDu2IE85mmr38zOgDEBDwqL5kIsuV_HKuFzFAXx0clxkmf7oEb1S12tftE0v7H-UQtEBgq_nRUU3K7fBK2tqnDCVeTNRUWXJ8UPcpIRZCzmqyZ9plt9Qt3zmux9QxRuWwY11jts4DOzFQfNZwxtHw#SAMPLE))
+The Database of Political Institutions presents institutional and electoral results data such as measures of checks and balances, tenure and stability of the government, identification of party affiliation and ideology, and fragmentation of opposition and government parties in the legislature, among others. The current version of the database, which is now hosted at the IDB, expands its coverage to about 180 countries for 40 years. Researchers at the World Bank Development Research Group first compiled the database in 2000. It has become one of the most cited databases in comparative political economy and comparative political institutions. Almost 3,000 studies have used this database so far as a source of institutional and political data in their empirical analysis.
 
 ```{r}
+library(haven)
 setwd ("/Users/Juan/Desktop/Georgetown/Coursework/2_Second_Semester/Data_Science/assignment04")
-LATAM_census <- read.csv("latam_census_2000-10.csv")
+Institutions <- read_dta("dpi2012.dta")
 ```
 
-## Running Code
+## 1. Ideologies
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+In the following graph, we present the evolution of the number of ruling parties according to their declared ideology. The red line indicates the share of ruling *leftist parties* and the blue line corresponds to *right parties*. The *center parties* are represented by the remainder.
 
 ```{r}
-1 + 1
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+
+Institutions <- Institutions %>%
+  mutate(execright = case_when(
+    execrlc == 1 ~ 1,
+    TRUE ~ 0
+    ))
+
+Institutions <- Institutions %>%
+  mutate(execleft = case_when(
+    execrlc == 3 ~ 1,
+    TRUE ~ 0
+  ))
+
+Institutions %>%
+  ggplot() + 
+  geom_smooth(mapping = aes (year, execright), color = "blue") + 
+  geom_smooth(mapping = aes (year, execleft), colour = "red") +
+  scale_y_continuous() +
+  labs(
+    title = "Chief Executive Party Orientation - World",
+    x = "Year",
+    y = "% of countries in the sample") +
+  theme_fivethirtyeight()
 ```
 
-You can add options to executable code like this
+We can observe a sustained decreasing trend in the number of leftist parties in the world since 1975 to 2012. Right parties display an inverted U shape, with a peak around 1995 (the neoliberal momentum), and a minimum for 2012 that is nevertheless higher than what we see in 1975. Ruling parties perceived as "center" accounted for roughly 55% in 1975 and in 2012.
 
 ```{r}
 #| echo: false
