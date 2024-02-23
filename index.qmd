@@ -9,9 +9,11 @@ format:
     embed-resources: true
 ---
 
-## Quarto
+## Data: Latin American countries in the 2000's
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+This data set contains selected indicators from census data at the individual level for 38 Latin American countries for the 2000-2010 decade. Source: IPUMS International ([Codebook](https://live.ipumsi.datadownload.ipums.org/web/extracts/ipumsi/2210604/ipumsi_00009.xml?jwt=eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ1bWEiLCJleHAiOjE3MDg2NjIwMzksIm5iZiI6MTcwODY2MTEzOSwic3ViIjoiN2RiMTViMTAtZjFjYi0wMTM1LWFmMmUtMDA1MDU2YTM1NDA1IiwiY29sbGVjdGlvbnMiOlsiY3BzIiwiaXB1bXNpIl19.D8QH7AA7EZluCH9dSzLSjOph6c6SD6UqifJGCQdwtB70yb-56nkF_ZrhqeAc-M2KubzNl7BV-4qp3YVq08znUFfm2waK6pWmOiGFFE2MRYAgLkfnwZniPCvRbuesOwy8Omv7XnMx217Th7aGhLWgfZkq9FU8mCq-7N1VVzpWZk2t6_SAf0mzRrfbD6CsnDNNWLDu2IE85mmr38zOgDEBDwqL5kIsuV_HKuFzFAXx0clxkmf7oEb1S12tftE0v7H-UQtEBgq_nRUU3K7fBK2tqnDCVeTNRUWXJ8UPcpIRZCzmqyZ9plt9Qt3zmux9QxRuWwY11jts4DOzFQfNZwxtHw#SAMPLE))
+
+
 
 ## Running Code
 
