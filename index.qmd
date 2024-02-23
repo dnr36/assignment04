@@ -19,7 +19,9 @@ setwd ("/Users/Juan/Desktop/Georgetown/Coursework/2_Second_Semester/Data_Science
 Institutions <- read_dta("dpi2012.dta")
 ```
 
-## 1. Ideologies
+# 1. Ideologies
+
+## 1.1 Ruling ideologies
 
 In the following graph, we present the evolution of the number of ruling parties according to their declared ideology. The red line indicates the share of ruling *leftist parties* and the blue line corresponds to *right parties*. The *center parties* are represented by the remainder.
 
@@ -54,9 +56,23 @@ Institutions %>%
 
 We can observe a sustained decreasing trend in the number of leftist parties in the world since 1975 to 2012. Right parties display an inverted U shape, with a peak around 1995 (the neoliberal momentum), and a minimum for 2012 that is nevertheless higher than what we see in 1975. Ruling parties perceived as "center" accounted for roughly 55% in 1975 and in 2012.
 
+## 1.2 Ideologies and electoral support
+
+In the following graph we aim to explore whether certain ideologies are better in achieving widespread support when winning elections. To do so, we sorted the vote share obtained by the ruling party in the last elections according to their ideology:
+
 ```{r}
-#| echo: false
-2 * 2
+# Define labels for Ideology variable
+ideology_labs <- c("Right", "Center", "Left")
+
+# Create a scatter plot with labels
+Institutions %>%
+  filter(execrlc > 0 & percentl > 5 & !is.na(percentl)) %>%
+  ggplot(mapping = aes(x = execrlc, y = percentl)) +
+  geom_point() +
+  labs(title = "Relationship between ruling party ideology and Votes",
+       x = "Ideology",
+       y = "Percentage of Votes Obtained") +
+  scale_x_continuous(breaks = c(1, 2, 3), labels = ideology_labs) 
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+At a glance, it seems that the right parties tend to earn popular support in higher amounts. However, it is contestable whether a system in which the ruling coalition wins with more than 70% of the votes can be considered a democracy in the Schumpeterian defenition (a competitive system). If we were to run a Chi-square test to uncover the existence of any statistical pattern, we should first deal with these outliers. Once that is done, the graph should display an equal distribution amongst the three party orientations. The `echo: false` option disables the printing of code (only output is displayed).
