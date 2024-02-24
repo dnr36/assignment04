@@ -15,8 +15,9 @@ The Database of Political Institutions presents institutional and electoral resu
 
 ```{r}
 library(haven)
-setwd ("/Users/Juan/Desktop/Georgetown/Coursework/2_Second_Semester/Data_Science/assignment04")
-Institutions <- read_dta("dpi2012.dta")
+library(tidyverse)
+#setwd ("/Users/Juan/Desktop/Georgetown/Coursework/2_Second_Semester/Data_Science/assignment04")
+institutions <- read_dta("dpi2012.dta")
 ```
 
 # 1. Ideologies
@@ -30,19 +31,19 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 
-Institutions <- Institutions %>%
+institutions <- institutions %>%
   mutate(execright = case_when(
     execrlc == 1 ~ 1,
     TRUE ~ 0
     ))
 
-Institutions <- Institutions %>%
+institutions <- institutions %>%
   mutate(execleft = case_when(
     execrlc == 3 ~ 1,
     TRUE ~ 0
   ))
 
-Institutions %>%
+institutions %>%
   ggplot() + 
   geom_smooth(mapping = aes (year, execright), color = "blue") + 
   geom_smooth(mapping = aes (year, execleft), colour = "red") +
@@ -65,7 +66,7 @@ In the following graph we aim to explore whether certain ideologies are better i
 ideology_labs <- c("Right", "Center", "Left")
 
 # Create a scatter plot with labels
-Institutions %>%
+institutions %>%
   filter(execrlc > 0 & percentl > 5 & !is.na(percentl)) %>%
   ggplot(mapping = aes(x = execrlc, y = percentl)) +
   geom_point() +
@@ -76,3 +77,58 @@ Institutions %>%
 ```
 
 At a glance, it seems that the right parties tend to earn popular support in higher amounts. However, it is contestable whether a system in which the ruling coalition wins with more than 70% of the votes can be considered a democracy in the Schumpeterian defenition (a competitive system). If we were to run a Chi-square test to uncover the existence of any statistical pattern, we should first deal with these outliers. Once that is done, the graph should display an equal distribution amongst the three party orientations. The `echo: false` option disables the printing of code (only output is displayed).
+
+
+# 2. Tenure of Governments 
+
+## Length of Tenure 
+
+Political stability is fundamental for governments to foster economic growth and effectively serve their citizens. One key indicator of stability is the duration of executive tenures in office. However, it's essential to recognize that prolonged tenures don't always correlate with national development. Nonetheless, examining executive tenure lengths by ideological orientation offers valuable insights into the contrasting political realities among right, left, and center governments.
+
+
+The graph below displays the frequency of different tenure lengths by ideology. The three ideological categories are stacked in the graph to emphasize the disparity in frequency magnitudes.
+
+```{r, echo = FALSE}
+#prepping data by creating an indicator variable to signal the length of a single executive's power
+
+institutions <- institutions %>%
+    mutate(new_exec = lead(yrsoffc, default = NA),
+           length_tenure = ifelse(new_exec == 1, 1, 0))
+
+#making graph to show the frequency of different lengths of executives' tenure
+
+institutions %>%
+    filter(execrlc %in% c(1, 2, 3), length_tenure == 1) %>%
+    select(yrsoffc, execrlc) %>%
+    ggplot(aes(x = yrsoffc, fill = as.factor(execrlc))) +
+    geom_bar() + 
+    labs(x = "Years in Office", y = "Frequency", title = "Executive tenure by Ideology") +
+    scale_fill_manual(name= "Ideology", 
+                      labels = c("Right", "Center", "Left"), 
+                      values = c("blue", "green", "red")) + 
+    theme_igray() 
+
+
+```
+
+## A deeper look into the tenures in the least democratic country: Afghanistan
+
+According to the Economist's Democracy Index, Afghanistan has been ranked as the country with the lowest score in terms of democratic institutions this year. Since party orientation data is not available in the analyzed data set, exploring executive tenure in this particular country becomes an intriguing inquiry.
+
+The graph below illustrates the frequency of tenures of different lengths. We can see that a lot of tenures are shorter than 5 years. Note how the bubbles for shorter tenures are bigger than for longer tenures such as anything longer than 10 years. This demonstrates the high levels of instability in the country. 
+
+
+```{r, echo = FALSE}
+summary_data <- institutions %>%
+    filter(length_tenure == 1, yrsoffc != -999) %>%
+    count(yrsoffc)
+
+ggplot(summary_data, aes(x = yrsoffc, y = n, fill = yrsoffc, size = n)) +
+    geom_count(color = "black") +
+    scale_size_continuous(range = c(1, 5)) + # I made sure I controlled the min and max size
+    labs(title = "Afghanistan Executive Tenure") +
+    xlab("Years") +
+    theme(legend.position = "none") +
+    ylab(NULL)
+```
+
