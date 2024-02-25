@@ -13,7 +13,7 @@ format:
 
 The Database of Political Institutions presents institutional and electoral results data such as measures of checks and balances, tenure and stability of the government, identification of party affiliation and ideology, and fragmentation of opposition and government parties in the legislature, among others. The current version of the database, which is now hosted at the IDB, expands its coverage to about 180 countries for 40 years. Researchers at the World Bank Development Research Group first compiled the database in 2000. It has become one of the most cited databases in comparative political economy and comparative political institutions. Almost 3,000 studies have used this database so far as a source of institutional and political data in their empirical analysis.
 
-```{r}
+```{r, echo = FALSE}
 library(haven)
 library(tidyverse)
 #setwd ("/Users/Juan/Desktop/Georgetown/Coursework/2_Second_Semester/Data_Science/assignment04")
@@ -26,7 +26,7 @@ institutions <- read_dta("dpi2012.dta")
 
 In the following graph, we present the evolution of the number of ruling parties according to their declared ideology. The red line indicates the share of ruling *leftist parties* and the blue line corresponds to *right parties*. The *center parties* are represented by the remainder.
 
-```{r}
+```{r, echo = FALSE}
 library(dplyr)
 library(ggplot2)
 library(ggthemes)
@@ -55,13 +55,13 @@ institutions %>%
   theme_fivethirtyeight()
 ```
 
-We can observe a sustained decreasing trend in the number of leftist parties in the world since 1975 to 2012. Right parties display an inverted U shape, with a peak around 1995 (the neoliberal momentum), and a minimum for 2012 that is nevertheless higher than what we see in 1975. Ruling parties perceived as "center" accounted for roughly 55% in 1975 and in 2012.
+We can observe a sustained decreasing trend in the number of leftist parties in the world since 1975 to 2012. Right parties display an inverted U shape, with a peak around 1995 (the neo-liberal momentum), and a minimum for 2012 that is nevertheless higher than what we see in 1975. Ruling parties perceived as "center" accounted for roughly 55% in 1975 and in 2012.
 
 ## 1.2 Ideologies and electoral support
 
 In the following graph we aim to explore whether certain ideologies are better in achieving widespread support when winning elections. To do so, we sorted the vote share obtained by the ruling party in the last elections according to their ideology:
 
-```{r}
+```{r, echo = FALSE}
 # Define labels for Ideology variable
 ideology_labs <- c("Right", "Center", "Left")
 
@@ -76,12 +76,12 @@ institutions %>%
   scale_x_continuous(breaks = c(1, 2, 3), labels = ideology_labs) 
 ```
 
-At a glance, it seems that the right parties tend to earn popular support in higher amounts. However, it is contestable whether a system in which the ruling coalition wins with more than 70% of the votes can be considered a democracy in the Schumpeterian defenition (a competitive system). If we were to run a Chi-square test to uncover the existence of any statistical pattern, we should first deal with these outliers. Once that is done, the graph should display an equal distribution amongst the three party orientations. The `echo: false` option disables the printing of code (only output is displayed).
+At a glance, it seems that the right parties tend to earn popular support in higher amounts. However, it is contestable whether a system in which the ruling coalition wins with more than 70% of the votes can be considered a democracy in the Schumpeterian definition (a competitive system). If we were to run a Chi-square test to uncover the existence of any statistical pattern, we should first deal with these outliers. Once that is done, the graph should display an equal distribution amongst the three party orientations. 
 
 
 # 2. Tenure of Governments 
 
-## Length of Tenure 
+## 2.1 Length of Tenure 
 
 Political stability is fundamental for governments to foster economic growth and effectively serve their citizens. One key indicator of stability is the duration of executive tenures in office. However, it's essential to recognize that prolonged tenures don't always correlate with national development. Nonetheless, examining executive tenure lengths by ideological orientation offers valuable insights into the contrasting political realities among right, left, and center governments.
 
@@ -93,7 +93,7 @@ The graph below displays the frequency of different tenure lengths by ideology. 
 
 institutions <- institutions %>%
     mutate(new_exec = lead(yrsoffc, default = NA),
-           length_tenure = ifelse(new_exec == 1, 1, 0))
+           length_tenure = ifelse(new_exec == 1 | new_exec == -999, 1, 0))
 
 #making graph to show the frequency of different lengths of executives' tenure
 
@@ -111,16 +111,18 @@ institutions %>%
 
 ```
 
-## A deeper look into the tenures in the least democratic country: Afghanistan
+## 2.2 A deeper look into the tenures in the least democratic country: Afghanistan
 
 According to the Economist's Democracy Index, Afghanistan has been ranked as the country with the lowest score in terms of democratic institutions this year. Since party orientation data is not available in the analyzed data set, exploring executive tenure in this particular country becomes an intriguing inquiry.
 
-The graph below illustrates the frequency of tenures of different lengths. We can see that a lot of tenures are shorter than 5 years. Note how the bubbles for shorter tenures are bigger than for longer tenures such as anything longer than 10 years. This demonstrates the high levels of instability in the country. 
+The graph below illustrates the frequency of tenures of different lengths in Afghanistan. Altogether, there are 8 different tenures illustrated covering 37 years. We can see in the axis and by the size of the bubble that the highest frequency is for tenures that are 5 years long. Following that, tenures of 2 years are the most common.  
+
+As previously noted, although the length of executive tenure is important for political stability, it does not always create economic prosperity. Although the average tenure is 4.6, somewhat similar to a full democracy, this does not translate into economic prosperity. According to the World Bank Afghanistan Economic Monitor for 2023, about half of the population in Afghanistan are living in poverty. 
 
 
 ```{r, echo = FALSE}
 summary_data <- institutions %>%
-    filter(length_tenure == 1, yrsoffc != -999) %>%
+    filter( ifs == "AFG", length_tenure == 1, yrsoffc != -999) %>%
     count(yrsoffc)
 
 ggplot(summary_data, aes(x = yrsoffc, y = n, fill = yrsoffc, size = n)) +
@@ -128,7 +130,11 @@ ggplot(summary_data, aes(x = yrsoffc, y = n, fill = yrsoffc, size = n)) +
     scale_size_continuous(range = c(1, 5)) + # I made sure I controlled the min and max size
     labs(title = "Afghanistan Executive Tenure") +
     xlab("Years") +
-    theme(legend.position = "none") +
-    ylab(NULL)
+    ylab("Frequency")+
+    theme(legend.position = "none") 
+    
 ```
+
+These four figures help understand the multiple dimensions of politics around the world. Exploring ideologies and tenure lengths provides a deeper insight into how political systems function and the diversity of governance structures across different nations.
+
 
