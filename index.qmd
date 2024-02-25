@@ -11,7 +11,7 @@ format:
 
 ## Political Institutions in the World
 
-The Database of Political Institutions presents institutional and electoral results data such as measures of checks and balances, tenure and stability of the government, identification of party affiliation and ideology, and fragmentation of opposition and government parties in the legislature, among others. The current version of the database, which is now hosted at the IDB, expands its coverage to about 180 countries for 40 years. Researchers at the World Bank Development Research Group first compiled the database in 2000. It has become one of the most cited databases in comparative political economy and comparative political institutions. Almost 3,000 studies have used this database so far as a source of institutional and political data in their empirical analysis.
+The [Database of Political Institutions](https://datacatalog.worldbank.org/search/dataset/0039819/Database-of-Political-Institutions) presents institutional and electoral results data such as measures of checks and balances, tenure and stability of the government, identification of party affiliation and ideology, and fragmentation of opposition and government parties in the legislature, among others. The current version of the database, which is now hosted at the IDB, expands its coverage to about 180 countries for 40 years. Researchers at the World Bank Development Research Group first compiled the database in 2000. It has become one of the most cited databases in comparative political economy and comparative political institutions. Almost 3,000 studies have used this database so far as a source of institutional and political data in their empirical analysis.
 
 ```{r, echo = FALSE}
 library(haven)
