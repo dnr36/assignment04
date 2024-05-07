@@ -13,7 +13,7 @@ format:
 
 The [Database of Political Institutions](https://datacatalog.worldbank.org/search/dataset/0039819/Database-of-Political-Institutions) presents institutional and electoral results data such as measures of checks and balances, tenure and stability of the government, identification of party affiliation and ideology, and fragmentation of opposition and government parties in the legislature, among others. The current version of the database, which is now hosted at the IDB, expands its coverage to about 180 countries for 40 years. Researchers at the World Bank Development Research Group first compiled the database in 2000. It has become one of the most cited databases in comparative political economy and comparative political institutions. Almost 3,000 studies have used this database so far as a source of institutional and political data in their empirical analysis.
 
-```{r, echo = FALSE}
+```{r}
 library(haven)
 library(tidyverse)
 #setwd ("/Users/Juan/Desktop/Georgetown/Coursework/2_Second_Semester/Data_Science/assignment04")
@@ -26,7 +26,7 @@ institutions <- read_dta("dpi2012.dta")
 
 In the following graph, we present the evolution of the number of ruling parties according to their declared ideology. The red line indicates the share of ruling *leftist parties* and the blue line corresponds to *right parties*. The *center parties* are represented by the remainder.
 
-```{r, echo = FALSE}
+```{r}
 library(dplyr)
 library(ggplot2)
 library(ggthemes)
@@ -61,7 +61,7 @@ We can observe a sustained decreasing trend in the number of leftist parties in 
 
 In the following graph we aim to explore whether certain ideologies are better in achieving widespread support when winning elections. To do so, we sorted the vote share obtained by the ruling party in the last elections according to their ideology:
 
-```{r, echo = FALSE}
+```{r}
 # Define labels for Ideology variable
 ideology_labs <- c("Right", "Center", "Left")
 
@@ -88,7 +88,7 @@ Political stability is fundamental for governments to foster economic growth and
 
 The graph below displays the frequency of different tenure lengths by ideology. The three ideological categories are stacked in the graph to emphasize the disparity in frequency magnitudes.
 
-```{r, echo = FALSE}
+```{r}
 #prepping data by creating an indicator variable to signal the length of a single executive's power
 
 institutions <- institutions %>%
@@ -120,7 +120,7 @@ The graph below illustrates the frequency of tenures of different lengths in Afg
 As previously noted, although the length of executive tenure is important for political stability, it does not always create economic prosperity. Although the average tenure is 4.6, somewhat similar to a full democracy, this does not translate into economic prosperity. According to the World Bank Afghanistan Economic Monitor for 2023, about half of the population in Afghanistan are living in poverty. 
 
 
-```{r, echo = FALSE}
+```{r}
 summary_data <- institutions %>%
     filter( ifs == "AFG", length_tenure == 1, yrsoffc != -999) %>%
     count(yrsoffc)
